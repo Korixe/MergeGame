@@ -230,6 +230,7 @@ MonoBehaviour:
   rows: 5
   columns: 6
   cellPrefab: {fileID: 1221770398877312982, guid: 5bc744f08a9e65647995a25fe79addfc, type: 3}
+  itemPrefab: {fileID: 2270933035151373470, guid: 99adc81e3314fa94fba7904032855e5e, type: 3}
   gridLayout: {fileID: 1733246457}
 --- !u!4 &387482731
 Transform:
