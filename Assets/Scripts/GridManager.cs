@@ -44,6 +44,11 @@ public class GridManager : MonoBehaviour
                 {
                     SpawnItemInCell(_cells[i, j], cellView, _itemDatas[1]);
                 }
+
+                if (i == 3 && j == 2)
+                {
+                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[2]);
+                }
             }
         }
     }

@@ -67,7 +67,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             MoveToCell(cell, targetCell, targetCellView);
         else
         {
-            if (targetCell.itemData.level == itemData.level && targetCell.itemData.type == itemData.type && itemData.isMergeable)
+            if (targetCell.itemData.level == itemData.level && targetCell.itemData.itemName == itemData.itemName && targetCell.itemData.itemName == itemData.itemName && itemData.isMergeable)
             {
                 ItemData nextItem = itemData.nextLevelItemData;
                 cell.isTaken = false;
