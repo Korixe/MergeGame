@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1369183335126624867}
   - component: {fileID: 438657574918078078}
   - component: {fileID: 1301700116552427784}
+  - component: {fileID: 1704419875525011780}
   m_Layer: 5
   m_Name: Grid
   m_TagString: Untagged
@@ -75,3 +76,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1704419875525011780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221770398877312982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84c3f437cb0e0614db531bd590207ea6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellView
+  row: 0
+  column: 0

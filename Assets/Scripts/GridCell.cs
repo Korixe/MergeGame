@@ -9,6 +9,6 @@ public class GridCell
     {
         this.row = row;
         this.column = column;
-        this.isTaken = false;
+        isTaken = false;
     }
 }

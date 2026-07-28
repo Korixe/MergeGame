@@ -25,7 +25,9 @@ public class GridManager : MonoBehaviour
             {
                 _cells[i, j] = new GridCell(i, j);
                 GameObject spawnedObject = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity);
-                spawnedObject.transform.parent = gridLayout.transform;
+                spawnedObject.transform.SetParent(gridLayout.transform, false);
+                CellView cellView = spawnedObject.GetComponent<CellView>();
+                cellView.SetPosition(i, j);
             }
         }
     }
