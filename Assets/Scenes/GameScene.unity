@@ -232,9 +232,9 @@ MonoBehaviour:
   cellPrefab: {fileID: 1221770398877312982, guid: 5bc744f08a9e65647995a25fe79addfc, type: 3}
   itemPrefab: {fileID: 2270933035151373470, guid: 99adc81e3314fa94fba7904032855e5e, type: 3}
   gridLayout: {fileID: 1733246457}
-  itemSprites:
-  - {fileID: -613363052048103786, guid: d6071018e3519fd43a9d91ab17465572, type: 3}
-  - {fileID: 2229681161047128923, guid: 0338820c8823df140915167dcc319feb, type: 3}
+  _itemDatas:
+  - {fileID: 11400000, guid: 3aa4c636ee2cc594b94a6a10d1ef5b23, type: 2}
+  - {fileID: 11400000, guid: 6b254c7ded28ed14ebeb9cf783e3eff7, type: 2}
 --- !u!4 &387482731
 Transform:
   m_ObjectHideFlags: 0

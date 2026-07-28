@@ -12,7 +12,7 @@ public class GridManager : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject itemPrefab;
     public GridLayoutGroup gridLayout;
-    public Sprite[] itemSprites;
+    [SerializeField] private ItemData[] _itemDatas;
 
     private void Awake()
     {
@@ -37,36 +37,12 @@ public class GridManager : MonoBehaviour
                 //test
                 if (i == 0 && j == 0 || i == 1 && j == 1)
                 {
-                    _cells[i, j].isTaken = true;
-                    _cells[i, j].itemData = ScriptableObject.CreateInstance<ItemData>();
-                    _cells[i, j].itemData.itemName = "A";
-                    _cells[i, j].itemData.type = 1;
-                    _cells[i, j].itemData.level = 1;
-                    _cells[i, j].itemData.isMergeable = true;
-                    _cells[i, j].itemData.isClickable = true;
-                    _cells[i, j].itemData.sprite = itemSprites[0];
-
-                    GameObject spawnedItem = Instantiate(itemPrefab, spawnedObject.transform);
-                    ItemView itemView = spawnedItem.GetComponent<ItemView>();
-                    itemView.SetItemData(_cells[i, j].itemData);
-                    _cells[i, j].itemView = itemView;
+                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[0]);
                 }
 
                 if (i == 2 && j == 2)
                 {
-                    _cells[i, j].isTaken = true;
-                    _cells[i, j].itemData = ScriptableObject.CreateInstance<ItemData>();
-                    _cells[i, j].itemData.itemName = "B";
-                    _cells[i, j].itemData.type = 1;
-                    _cells[i, j].itemData.level = 2;
-                    _cells[i, j].itemData.isMergeable = true;
-                    _cells[i, j].itemData.isClickable = true;
-                    _cells[i, j].itemData.sprite = itemSprites[1];
-
-                    GameObject spawnedItem = Instantiate(itemPrefab, spawnedObject.transform);
-                    ItemView itemView = spawnedItem.GetComponent<ItemView>();
-                    itemView.SetItemData(_cells[i, j].itemData);
-                    _cells[i, j].itemView = itemView;
+                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[1]);
                 }
             }
         }
@@ -84,5 +60,16 @@ public class GridManager : MonoBehaviour
     {
         GridCell cell = GetCell(row, col);
         return cell != null && !cell.isTaken;
+    }
+
+    public void SpawnItemInCell(GridCell cell, CellView cellView, ItemData itemData)
+    {
+        cell.isTaken = true;
+        cell.itemData = itemData;
+
+        GameObject spawnedItem = Instantiate(itemPrefab, cellView.transform);
+        ItemView itemView = spawnedItem.GetComponent<ItemView>();
+        itemView.SetItemData(itemData);
+        cell.itemView = itemView;
     }
 }

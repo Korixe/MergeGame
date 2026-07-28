@@ -69,9 +69,19 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             if (targetCell.itemData.level == itemData.level && targetCell.itemData.type == itemData.type && itemData.isMergeable)
             {
-                // test
+                ItemData nextItem = itemData.nextLevelItemData;
+
                 Destroy(gameObject);
                 Destroy(targetCell.itemView.gameObject);
+
+                targetCell.isTaken = false;
+                targetCell.itemData = null;
+                targetCell.itemView = null;
+
+                if (nextItem != null)
+                {
+                    GridManager.Instance.SpawnItemInCell(targetCell, targetCellView, nextItem);
+                }
             }
             else
                 ReturnToOriginalCell();
