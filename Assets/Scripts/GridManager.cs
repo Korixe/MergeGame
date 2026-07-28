@@ -28,6 +28,22 @@ public class GridManager : MonoBehaviour
                 spawnedObject.transform.SetParent(gridLayout.transform, false);
                 CellView cellView = spawnedObject.GetComponent<CellView>();
                 cellView.SetPosition(i, j);
+
+                //test
+                if (i == 0 && j == 0)
+                {
+                    _cells[i, j].isTaken = true;
+                    _cells[i, j].itemData = ScriptableObject.CreateInstance<ItemData>();
+                    _cells[i, j].itemData.itemName = "A";
+                    _cells[i, j].itemData.type = 1;
+                    _cells[i, j].itemData.level = 1;
+                    _cells[i, j].itemData.isMergeable = true;
+                    _cells[i, j].itemData.isClickable = true;
+                    _cells[i, j].itemData.prefab = Resources.Load<Sprite>("Assets/Prefabs/temp1");
+
+                    ItemView itemView = spawnedObject.AddComponent<ItemView>();
+                    itemView.SetItemData(_cells[i, j].itemData);
+                }
             }
         }
     }

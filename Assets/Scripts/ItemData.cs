@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public string itemName;
-    public Sprite sprite;
+    public Sprite prefab;
     public int type;
     public int level;
     public bool isMergeable;
