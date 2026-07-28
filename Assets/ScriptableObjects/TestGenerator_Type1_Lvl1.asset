@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1affa34b6e63a044885ac5d4eed59943, type: 3}
   m_Name: TestGenerator_Type1_Lvl1
   m_EditorClassIdentifier: Assembly-CSharp::GeneratorData
-  itemName: 
-  sprite: {fileID: 0}
-  type: 0
-  level: 0
-  isMergeable: 0
-  isClickable: 0
+  itemName: GeneratorTest
+  sprite: {fileID: -2541595303327328845, guid: 5f83ebc19dd43954d8521e99803b6397, type: 3}
+  type: 1
+  level: 1
+  isMergeable: 1
+  isClickable: 1
   nextLevelItemData: {fileID: 0}
-  possibleItems: []
-  maxSpawns: 0
-  cooldownTime: 0
+  possibleItems:
+  - {fileID: 11400000, guid: 3aa4c636ee2cc594b94a6a10d1ef5b23, type: 2}
+  - {fileID: 11400000, guid: 6b254c7ded28ed14ebeb9cf783e3eff7, type: 2}
+  maxSpawns: 10
+  cooldownTime: 10

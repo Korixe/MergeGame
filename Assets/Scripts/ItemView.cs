@@ -3,17 +3,15 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public ItemData itemData;
     private Image _image;
-    private GridManager _gridManager;
-    private CellView _cellView;
     private Vector2 _originalPosition;
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
     private Transform _originalParentCell;
-
+    private int _itemUsed = 0;
 
 
 
@@ -123,5 +121,51 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         transform.SetParent(_originalParentCell, false);
         _rectTransform.anchoredPosition = _originalPosition;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {   
+        if(eventData.dragging)
+            return;
+        
+        if(itemData is GeneratorData generatorData)
+        {
+            if(generatorData.possibleItems.Length > 0 && _itemUsed < generatorData.maxSpawns)
+            {
+                int randIndex = Random.Range(0, generatorData.possibleItems.Length);
+                ItemData randomItem = generatorData.possibleItems[randIndex];
+                
+                int row = -1;
+                int col = -1;
+                bool foundFreeCell = false;
+                for(int i = 0; i < GridManager.Instance.rows; i++)
+                {
+                    for(int j = 0; j < GridManager.Instance.columns; j++)
+                    {
+                        if(GridManager.Instance.IsCellFree(i, j))
+                        {
+                            row = i;
+                            col = j;
+                            foundFreeCell = true;
+                            break;
+                        }
+                    }
+                    if(foundFreeCell)
+                        break;
+                        
+                }
+                if(foundFreeCell)
+                {
+                    GridCell targetCell = GridManager.Instance.GetCell(row, col);
+                    int childIndex = row * GridManager.Instance.columns + col;
+                    CellView targetCellView = GridManager.Instance.gridLayout.transform.GetChild(childIndex).GetComponent<CellView>();
+                        
+                    GridManager.Instance.SpawnItemInCell(targetCell, targetCellView, randomItem);
+                    _itemUsed++;
+                }
+                else
+                    Debug.Log("Can't spawn an item, no free cells available");
+            }
+        }
     }
 }
