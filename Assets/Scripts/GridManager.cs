@@ -8,7 +8,9 @@ public class GridManager : MonoBehaviour
     public int columns;
     private GridCell[,] _cells;
     public GameObject cellPrefab;
+    public GameObject itemPrefab;
     public GridLayoutGroup gridLayout;
+    public Sprite[] itemSprites;
 
     private void Awake()
     {
@@ -39,9 +41,10 @@ public class GridManager : MonoBehaviour
                     _cells[i, j].itemData.level = 1;
                     _cells[i, j].itemData.isMergeable = true;
                     _cells[i, j].itemData.isClickable = true;
-                    _cells[i, j].itemData.prefab = Resources.Load<Sprite>("Assets/Prefabs/temp1");
+                    _cells[i, j].itemData.sprite = itemSprites[0];
 
-                    ItemView itemView = spawnedObject.AddComponent<ItemView>();
+                    GameObject spawnedItem = Instantiate(itemPrefab, spawnedObject.transform);
+                    ItemView itemView = spawnedItem.GetComponent<ItemView>();
                     itemView.SetItemData(_cells[i, j].itemData);
                 }
             }

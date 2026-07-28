@@ -14,7 +14,7 @@ public class ItemView : MonoBehaviour
     public void SetItemData(ItemData data)
     {
         itemData = data;
-        _image.sprite = itemData.prefab;
+        _image.sprite = itemData.sprite;
     }
 
 }
