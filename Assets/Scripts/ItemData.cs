@@ -9,5 +9,6 @@ public class ItemData : ScriptableObject
     public int level;
     public bool isMergeable;
     public bool isClickable;
+    public ItemData nextLevelItemData;
 
 }

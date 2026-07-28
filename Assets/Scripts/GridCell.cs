@@ -5,6 +5,7 @@ public class GridCell
     public int column;
     public bool isTaken;
     public ItemData itemData;
+    public ItemView itemView;
 
     public GridCell(int row, int column)
     {
@@ -12,5 +13,6 @@ public class GridCell
         this.column = column;
         isTaken = false;
         itemData = null;
+        itemView = null;
     }
 }
