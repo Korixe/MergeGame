@@ -51,6 +51,23 @@ public class GridManager : MonoBehaviour
                     itemView.SetItemData(_cells[i, j].itemData);
                     _cells[i, j].itemView = itemView;
                 }
+
+                if (i == 2 && j == 2)
+                {
+                    _cells[i, j].isTaken = true;
+                    _cells[i, j].itemData = ScriptableObject.CreateInstance<ItemData>();
+                    _cells[i, j].itemData.itemName = "B";
+                    _cells[i, j].itemData.type = 1;
+                    _cells[i, j].itemData.level = 2;
+                    _cells[i, j].itemData.isMergeable = true;
+                    _cells[i, j].itemData.isClickable = true;
+                    _cells[i, j].itemData.sprite = itemSprites[1];
+
+                    GameObject spawnedItem = Instantiate(itemPrefab, spawnedObject.transform);
+                    ItemView itemView = spawnedItem.GetComponent<ItemView>();
+                    itemView.SetItemData(_cells[i, j].itemData);
+                    _cells[i, j].itemView = itemView;
+                }
             }
         }
     }

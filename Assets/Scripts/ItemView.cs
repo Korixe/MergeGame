@@ -66,7 +66,16 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (!targetCell.isTaken)
             MoveToCell(Cell, targetCell, targetCellView);
         else
-            ReturnToOriginalCell();
+        {
+            if (targetCell.itemData.level == itemData.level && targetCell.itemData.type == itemData.type && itemData.isMergeable)
+            {
+                // test
+                Destroy(gameObject);
+                Destroy(targetCell.itemView.gameObject);
+            }
+            else
+                ReturnToOriginalCell();
+        }
     }
 
     private CellView GetCellUnderItem(PointerEventData eventData)
