@@ -4,6 +4,8 @@ using UnityEngine.UI;
 [System.Serializable]
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
+    
     public int rows;
     public int columns;
     private GridCell[,] _cells;
@@ -14,6 +16,7 @@ public class GridManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         InitializeGrid();
     }
 
@@ -32,7 +35,7 @@ public class GridManager : MonoBehaviour
                 cellView.SetPosition(i, j);
 
                 //test
-                if (i == 0 && j == 0)
+                if (i == 0 && j == 0 || i == 1 && j == 1)
                 {
                     _cells[i, j].isTaken = true;
                     _cells[i, j].itemData = ScriptableObject.CreateInstance<ItemData>();
@@ -46,6 +49,7 @@ public class GridManager : MonoBehaviour
                     GameObject spawnedItem = Instantiate(itemPrefab, spawnedObject.transform);
                     ItemView itemView = spawnedItem.GetComponent<ItemView>();
                     itemView.SetItemData(_cells[i, j].itemData);
+                    _cells[i, j].itemView = itemView;
                 }
             }
         }
