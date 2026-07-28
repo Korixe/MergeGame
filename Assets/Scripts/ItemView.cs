@@ -51,11 +51,11 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         _canvasGroup.blocksRaycasts = true;
-        CellView CellView = _originalParentCell.GetComponent<CellView>();
-        GridCell Cell = GridManager.Instance.GetCell(CellView.row, CellView.column);
+        CellView prevCellView = _originalParentCell.GetComponent<CellView>();
+        GridCell cell = GridManager.Instance.GetCell(prevCellView.row, prevCellView.column);
         CellView targetCellView = GetCellUnderItem(eventData);
 
-        if (targetCellView == null || targetCellView == CellView)
+        if (targetCellView == null || targetCellView == prevCellView)
         {
             ReturnToOriginalCell();
             return;
@@ -64,12 +64,15 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         GridCell targetCell = GridManager.Instance.GetCell(targetCellView.row, targetCellView.column);
 
         if (!targetCell.isTaken)
-            MoveToCell(Cell, targetCell, targetCellView);
+            MoveToCell(cell, targetCell, targetCellView);
         else
         {
             if (targetCell.itemData.level == itemData.level && targetCell.itemData.type == itemData.type && itemData.isMergeable)
             {
                 ItemData nextItem = itemData.nextLevelItemData;
+                cell.isTaken = false;
+                cell.itemData = null;
+                cell.itemView = null;
 
                 Destroy(gameObject);
                 Destroy(targetCell.itemView.gameObject);
