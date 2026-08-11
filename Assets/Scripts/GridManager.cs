@@ -139,4 +139,9 @@ public class GridManager : MonoBehaviour
         if (pauseStatus)
             SaveManager.SaveGame(CollectSaveData());
     }
+
+    public void OnApplicationQuit()
+    {
+        SaveManager.SaveGame(CollectSaveData());
+    }
 }
