@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1affa34b6e63a044885ac5d4eed59943, type: 3}
   m_Name: TestGenerator_Type1_Lvl1
   m_EditorClassIdentifier: Assembly-CSharp::GeneratorData
+  itemID: test_generator_lvl1
   itemName: GeneratorTest
   sprite: {fileID: -2541595303327328845, guid: 5f83ebc19dd43954d8521e99803b6397, type: 3}
   type: 1
