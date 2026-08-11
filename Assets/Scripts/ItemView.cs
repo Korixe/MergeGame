@@ -67,7 +67,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             MoveToCell(cell, targetCell, targetCellView);
         else
         {
-            if (targetCell.itemData.level == itemData.level && targetCell.itemData.itemName == itemData.itemName && targetCell.itemData.itemName == itemData.itemName && itemData.isMergeable)
+            if (targetCell.itemData.level == itemData.level && targetCell.itemData.itemName == itemData.itemName && itemData.isMergeable)
             {
                 ItemData nextItem = itemData.nextLevelItemData;
                 cell.isTaken = false;
@@ -126,46 +126,38 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     public void OnPointerClick(PointerEventData eventData)
-    {   
-        if(eventData.dragging)
+    {
+        if (eventData.dragging)
             return;
-        
-        if(itemData is GeneratorData generatorData)
+
+        if (itemData is GeneratorData generatorData)
         {
-            if(generatorData.possibleItems.Length > 0 && !_isOnCooldown)
+            if (generatorData.possibleItems.Length > 0 && !_isOnCooldown)
             {
                 int randIndex = Random.Range(0, generatorData.possibleItems.Length);
                 ItemData randomItem = generatorData.possibleItems[randIndex];
-                
-                int row = -1;
-                int col = -1;
-                bool foundFreeCell = false;
-                for(int i = 0; i < GridManager.Instance.rows; i++)
+
+                GridCell targetCell = null;
+                for (int i = 0; i < GridManager.Instance.rows; i++)
                 {
-                    for(int j = 0; j < GridManager.Instance.columns; j++)
+                    for (int j = 0; j < GridManager.Instance.columns; j++)
                     {
-                        if(GridManager.Instance.IsCellFree(i, j))
+                        if (GridManager.Instance.IsCellFree(i, j))
                         {
-                            row = i;
-                            col = j;
-                            foundFreeCell = true;
+                            targetCell = GridManager.Instance.GetCell(i, j);
                             break;
                         }
                     }
-                    if(foundFreeCell)
+                    if (targetCell != null)
                         break;
-                        
                 }
-                if(foundFreeCell)
+
+                if (targetCell != null)
                 {
-                    GridCell targetCell = GridManager.Instance.GetCell(row, col);
-                    int childIndex = row * GridManager.Instance.columns + col;
-                    CellView targetCellView = GridManager.Instance.gridLayout.transform.GetChild(childIndex).GetComponent<CellView>();
-                        
-                    GridManager.Instance.SpawnItemInCell(targetCell, targetCellView, randomItem);
+                    GridManager.Instance.SpawnItemInCell(targetCell, targetCell.cellView, randomItem);
                     _itemUsed++;
 
-                    if(_itemUsed >= generatorData.maxSpawns)
+                    if (_itemUsed >= generatorData.maxSpawns)
                     {
                         _isOnCooldown = true;
                         StartCoroutine(StartCooldown(generatorData.cooldownTime));
@@ -182,7 +174,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         float timer = 0f;
         while (timer < cooldownDuration)
         {
-            timer += Time.deltaTime;    
+            timer += Time.deltaTime;
             yield return null;
         }
 
