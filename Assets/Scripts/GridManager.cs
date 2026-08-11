@@ -33,6 +33,7 @@ public class GridManager : MonoBehaviour
                 spawnedObject.transform.SetParent(gridLayout.transform, false);
                 CellView cellView = spawnedObject.GetComponent<CellView>();
                 cellView.SetPosition(i, j);
+                _cells[i, j].cellView = cellView;
 
                 //test
                 if (i == 0 && j == 0 || i == 1 && j == 1)
@@ -71,6 +72,7 @@ public class GridManager : MonoBehaviour
     {
         cell.isTaken = true;
         cell.itemData = itemData;
+        cell.cellView = cellView;
 
         GameObject spawnedItem = Instantiate(itemPrefab, cellView.transform);
         ItemView itemView = spawnedItem.GetComponent<ItemView>();
