@@ -18,10 +18,10 @@ public class GridManager : MonoBehaviour
     {
         Instance = this;
         InitializeGrid();
-
-        SaveGameData loadedData = SaveManager.LoadGame();
+        
+        SaveGameData loadedData = SaveManager.LoadGame();   
         if (loadedData != null)
-            RestoreFromLoadedData(loadedData);
+            RestoreFromLoadedData(loadedData);     
         else
             SpawnTestItems();
     }
@@ -47,9 +47,6 @@ public class GridManager : MonoBehaviour
     private void SpawnTestItems()
     {
         //test
-        if (IsCellFree(0, 0)) SpawnItemInCell(GetCell(0, 0), GetCell(0, 0).cellView, itemDatas[0]);
-        if (IsCellFree(1, 1)) SpawnItemInCell(GetCell(1, 1), GetCell(1, 1).cellView, itemDatas[0]);
-        if (IsCellFree(2, 2)) SpawnItemInCell(GetCell(2, 2), GetCell(2, 2).cellView, itemDatas[1]);
         if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatas[2]);
     }
 
