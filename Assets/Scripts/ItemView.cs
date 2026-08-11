@@ -2,18 +2,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Collections;
 
-public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public ItemData itemData;
     private Image _image;
-    private GridManager _gridManager;
-    private CellView _cellView;
     private Vector2 _originalPosition;
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
     private Transform _originalParentCell;
-
+    private int _itemUsed = 0;
+    private bool _isOnCooldown = false;
 
 
 
@@ -51,11 +51,11 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         _canvasGroup.blocksRaycasts = true;
-        CellView CellView = _originalParentCell.GetComponent<CellView>();
-        GridCell Cell = GridManager.Instance.GetCell(CellView.row, CellView.column);
+        CellView prevCellView = _originalParentCell.GetComponent<CellView>();
+        GridCell cell = GridManager.Instance.GetCell(prevCellView.row, prevCellView.column);
         CellView targetCellView = GetCellUnderItem(eventData);
 
-        if (targetCellView == null || targetCellView == CellView)
+        if (targetCellView == null || targetCellView == prevCellView)
         {
             ReturnToOriginalCell();
             return;
@@ -64,12 +64,15 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         GridCell targetCell = GridManager.Instance.GetCell(targetCellView.row, targetCellView.column);
 
         if (!targetCell.isTaken)
-            MoveToCell(Cell, targetCell, targetCellView);
+            MoveToCell(cell, targetCell, targetCellView);
         else
         {
-            if (targetCell.itemData.level == itemData.level && targetCell.itemData.type == itemData.type && itemData.isMergeable)
+            if (targetCell.itemData.level == itemData.level && targetCell.itemData.itemName == itemData.itemName && itemData.isMergeable)
             {
                 ItemData nextItem = itemData.nextLevelItemData;
+                cell.isTaken = false;
+                cell.itemData = null;
+                cell.itemView = null;
 
                 Destroy(gameObject);
                 Destroy(targetCell.itemView.gameObject);
@@ -120,5 +123,62 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         transform.SetParent(_originalParentCell, false);
         _rectTransform.anchoredPosition = _originalPosition;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.dragging)
+            return;
+
+        if (itemData is GeneratorData generatorData)
+        {
+            if (generatorData.possibleItems.Length > 0 && !_isOnCooldown)
+            {
+                int randIndex = Random.Range(0, generatorData.possibleItems.Length);
+                ItemData randomItem = generatorData.possibleItems[randIndex];
+
+                GridCell targetCell = null;
+                for (int i = 0; i < GridManager.Instance.rows; i++)
+                {
+                    for (int j = 0; j < GridManager.Instance.columns; j++)
+                    {
+                        if (GridManager.Instance.IsCellFree(i, j))
+                        {
+                            targetCell = GridManager.Instance.GetCell(i, j);
+                            break;
+                        }
+                    }
+                    if (targetCell != null)
+                        break;
+                }
+
+                if (targetCell != null)
+                {
+                    GridManager.Instance.SpawnItemInCell(targetCell, targetCell.cellView, randomItem);
+                    _itemUsed++;
+
+                    if (_itemUsed >= generatorData.maxSpawns)
+                    {
+                        _isOnCooldown = true;
+                        StartCoroutine(StartCooldown(generatorData.cooldownTime));
+                    }
+                }
+                else
+                    Debug.Log("Can't spawn an item, no free cells available");
+            }
+        }
+    }
+
+    IEnumerator StartCooldown(float cooldownDuration)
+    {
+        float timer = 0f;
+        while (timer < cooldownDuration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        _itemUsed = 0;
+        _isOnCooldown = false;
     }
 }

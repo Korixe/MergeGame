@@ -235,6 +235,7 @@ MonoBehaviour:
   _itemDatas:
   - {fileID: 11400000, guid: 3aa4c636ee2cc594b94a6a10d1ef5b23, type: 2}
   - {fileID: 11400000, guid: 6b254c7ded28ed14ebeb9cf783e3eff7, type: 2}
+  - {fileID: 11400000, guid: f4074ea0d4e77f44aabe511d2dda45cd, type: 2}
 --- !u!4 &387482731
 Transform:
   m_ObjectHideFlags: 0
