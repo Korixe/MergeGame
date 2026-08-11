@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Collections;
 
 public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -12,6 +13,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private CanvasGroup _canvasGroup;
     private Transform _originalParentCell;
     private int _itemUsed = 0;
+    private bool _isOnCooldown = false;
 
 
 
@@ -130,7 +132,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         
         if(itemData is GeneratorData generatorData)
         {
-            if(generatorData.possibleItems.Length > 0 && _itemUsed < generatorData.maxSpawns)
+            if(generatorData.possibleItems.Length > 0 && !_isOnCooldown)
             {
                 int randIndex = Random.Range(0, generatorData.possibleItems.Length);
                 ItemData randomItem = generatorData.possibleItems[randIndex];
@@ -162,10 +164,29 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                         
                     GridManager.Instance.SpawnItemInCell(targetCell, targetCellView, randomItem);
                     _itemUsed++;
+
+                    if(_itemUsed >= generatorData.maxSpawns)
+                    {
+                        _isOnCooldown = true;
+                        StartCoroutine(StartCooldown(generatorData.cooldownTime));
+                    }
                 }
                 else
                     Debug.Log("Can't spawn an item, no free cells available");
             }
         }
+    }
+
+    IEnumerator StartCooldown(float cooldownDuration)
+    {
+        float timer = 0f;
+        while (timer < cooldownDuration)
+        {
+            timer += Time.deltaTime;    
+            yield return null;
+        }
+
+        _itemUsed = 0;
+        _isOnCooldown = false;
     }
 }
