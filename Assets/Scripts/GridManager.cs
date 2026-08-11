@@ -129,7 +129,7 @@ public class GridManager : MonoBehaviour
 
             if(itemData is GeneratorData)
             {
-                //restore generator
+                cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
             }
         }
     }

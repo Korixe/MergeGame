@@ -15,8 +15,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private int _itemUsed = 0;
     private bool _isOnCooldown = false;
 
-    public int ItemUsed => _itemUsed;
-    public bool IsOnCooldown => _isOnCooldown;
+    public int itemUsed => _itemUsed;
+    public bool isOnCooldown => _isOnCooldown;
 
     private void Awake()
     {
@@ -199,5 +199,15 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         _itemUsed = 0;
         _isOnCooldown = false;
+    }
+
+    public void RestoreGeneratorState(int itemUsed, bool isOnCooldown)
+    {
+        _itemUsed = itemUsed;
+        if(isOnCooldown && itemData is GeneratorData generatorData)
+        {
+            _isOnCooldown = true;
+            StartCoroutine(StartCooldown(generatorData.cooldownTime));
+        }
     }
 }
