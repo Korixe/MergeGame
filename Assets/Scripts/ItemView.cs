@@ -12,8 +12,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
     private Transform _originalParentCell;
-    private int _itemUsed = 0;
-    private bool _isOnCooldown = false;
+    public int itemUsed = 0;
+    public bool isOnCooldown = false;
 
 
 
@@ -150,7 +150,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         if (itemData is GeneratorData generatorData)
         {
-            if (generatorData.possibleItems.Length > 0 && !_isOnCooldown)
+            if (generatorData.possibleItems.Length > 0 && !isOnCooldown)
             {
                 int randIndex = Random.Range(0, generatorData.possibleItems.Length);
                 ItemData randomItem = generatorData.possibleItems[randIndex];
@@ -173,11 +173,11 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 if (targetCell != null)
                 {
                     GridManager.Instance.SpawnItemInCell(targetCell, targetCell.cellView, randomItem);
-                    _itemUsed++;
+                    itemUsed++;
 
-                    if (_itemUsed >= generatorData.maxSpawns)
+                    if (itemUsed >= generatorData.maxSpawns)
                     {
-                        _isOnCooldown = true;
+                        isOnCooldown = true;
                         StartCoroutine(StartCooldown(generatorData.cooldownTime));
                     }
                 }
@@ -196,7 +196,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             yield return null;
         }
 
-        _itemUsed = 0;
-        _isOnCooldown = false;
+        itemUsed = 0;
+        isOnCooldown = false;
     }
 }

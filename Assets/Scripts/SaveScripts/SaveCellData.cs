@@ -6,6 +6,6 @@ public class SaveCellData
     public int row;
     public int column;
     public string ItemID;
-    public int itemUsedCount;
+    public int itemUsed;
     public bool isOnCooldown;
 }

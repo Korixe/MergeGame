@@ -12,12 +12,18 @@ public class GridManager : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject itemPrefab;
     public GridLayoutGroup gridLayout;
-    [SerializeField] private ItemData[] _itemDatas;
+    public ItemData[] itemDatas;
 
     private void Awake()
     {
         Instance = this;
         InitializeGrid();
+
+        SaveGameData loadedData = SaveManager.LoadGame();
+        if (loadedData != null)
+            RestoreFromLoadedData(loadedData);
+        else
+            SpawnTestItems();
     }
 
     private void InitializeGrid()
@@ -34,30 +40,19 @@ public class GridManager : MonoBehaviour
                 CellView cellView = spawnedObject.GetComponent<CellView>();
                 cellView.SetPosition(i, j);
                 _cells[i, j].cellView = cellView;
-
-                //test
-                if (i == 0 && j == 0 || i == 1 && j == 1)
-                {
-                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[0]);
-                }
-
-                if (i == 2 && j == 2)
-                {
-                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[1]);
-                }
-
-                if (i == 3 && j == 2)
-                {
-                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[2]);
-                }
-
-                if (i == 4 && j == 2)
-                {
-                    SpawnItemInCell(_cells[i, j], cellView, _itemDatas[2]);
-                }
             }
         }
     }
+
+    private void SpawnTestItems()
+    {
+        //test
+        if (IsCellFree(0, 0)) SpawnItemInCell(GetCell(0, 0), GetCell(0, 0).cellView, itemDatas[0]);
+        if (IsCellFree(1, 1)) SpawnItemInCell(GetCell(1, 1), GetCell(1, 1).cellView, itemDatas[0]);
+        if (IsCellFree(2, 2)) SpawnItemInCell(GetCell(2, 2), GetCell(2, 2).cellView, itemDatas[1]);
+        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatas[2]);
+    }
+
 
     public GridCell GetCell(int row, int col)
     {
@@ -83,5 +78,65 @@ public class GridManager : MonoBehaviour
         ItemView itemView = spawnedItem.GetComponent<ItemView>();
         itemView.SetItemData(itemData);
         cell.itemView = itemView;
+    }
+
+    public ItemData GetItemDataByID(string id)
+    {
+        foreach (ItemData data in itemDatas)
+        {
+            if (data.itemID == id)
+                return data;
+        }
+        return null;
+    }
+
+    public SaveGameData CollectSaveData()
+    {
+        SaveGameData saveData = new SaveGameData();
+        saveData.savedCellData = new System.Collections.Generic.List<SaveCellData>();
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                GridCell cell = _cells[i, j];
+                if (cell.isTaken && cell.itemData != null)
+                {
+                    SaveCellData cellData = new SaveCellData
+                    {
+                        row = cell.row,
+                        column = cell.column,
+                        ItemID = cell.itemData.itemID,
+                        itemUsed = cell.itemView.itemUsed,
+                        isOnCooldown = cell.itemView.isOnCooldown
+                    };
+
+                    saveData.savedCellData.Add(cellData);
+                }
+            }
+        }
+
+        return saveData;
+    }
+
+    public void RestoreFromLoadedData(SaveGameData data)
+    {
+        foreach (SaveCellData cellData in data.savedCellData)
+        {
+            GridCell cell = GetCell(cellData.row, cellData.column);
+            ItemData itemData = GetItemDataByID(cellData.ItemID);
+            SpawnItemInCell(cell, cell.cellView, itemData);
+
+            if(itemData is GeneratorData)
+            {
+                //restore generator
+            }
+        }
+    }
+
+    public void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+            SaveManager.SaveGame(CollectSaveData());
     }
 }
