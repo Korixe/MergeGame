@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d85fee8314e334a96b3301e4ab09aa, type: 3}
   m_Name: TestItem_Type1_Lvll2
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemID: test_item_lvl2
   itemName: B
   sprite: {fileID: 2229681161047128923, guid: 0338820c8823df140915167dcc319feb, type: 3}
   type: 1

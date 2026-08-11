@@ -232,7 +232,7 @@ MonoBehaviour:
   cellPrefab: {fileID: 1221770398877312982, guid: 5bc744f08a9e65647995a25fe79addfc, type: 3}
   itemPrefab: {fileID: 2270933035151373470, guid: 99adc81e3314fa94fba7904032855e5e, type: 3}
   gridLayout: {fileID: 1733246457}
-  _itemDatas:
+  itemDatas:
   - {fileID: 11400000, guid: 3aa4c636ee2cc594b94a6a10d1ef5b23, type: 2}
   - {fileID: 11400000, guid: 6b254c7ded28ed14ebeb9cf783e3eff7, type: 2}
   - {fileID: 11400000, guid: f4074ea0d4e77f44aabe511d2dda45cd, type: 2}
