@@ -87,7 +87,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 }
             }
             else
-                ReturnToOriginalCell();
+                SwapItems(cell, targetCell, prevCellView, targetCellView);
         }
     }
 
@@ -123,6 +123,24 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         transform.SetParent(_originalParentCell, false);
         _rectTransform.anchoredPosition = _originalPosition;
+    }
+
+    private void SwapItems(GridCell originCell, GridCell targetCell, CellView originCellView, CellView targetCellView)
+    {
+        ItemView targetItemView = targetCell.itemView;
+        ItemData targetItemData = targetCell.itemData;
+
+        originCell.itemData = targetItemData;
+        originCell.itemView = targetItemView;
+
+        targetCell.itemData = itemData;
+        targetCell.itemView = this;
+
+        targetItemView.transform.SetParent(originCellView.transform, false);
+        targetItemView.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+        transform.SetParent(targetCellView.transform, false);
+        _rectTransform.anchoredPosition = Vector2.zero;
     }
 
     public void OnPointerClick(PointerEventData eventData)
