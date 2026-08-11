@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: -2541595303327328845, guid: 5f83ebc19dd43954d8521e99803b6397, type: 3}
   type: 1
   level: 1
-  isMergeable: 1
+  isMergeable: 0
   isClickable: 1
   nextLevelItemData: {fileID: 0}
   possibleItems:
