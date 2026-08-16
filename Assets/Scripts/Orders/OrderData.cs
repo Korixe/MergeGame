@@ -7,6 +7,6 @@ public class OrderData : ScriptableObject
     public string orderID;
     public string orderName;
     public int orderValue;
-    public List<ItemData> requiredItems;
+    public List<OrderRequirements> requirements;
     
 }
