@@ -14,7 +14,7 @@ public class OrderView : MonoBehaviour
     {
         _activeOrder = activeOrder;
         orderNameText.text = _activeOrder.orderData.orderName;
-        orderValueText.text = $"Value: {_activeOrder.orderData.orderValue}";\
+        orderValueText.text = $"Value: {_activeOrder.orderData.orderValue}";
 
         completeOrderButton.onClick.RemoveAllListeners();
         completeOrderButton.onClick.AddListener(OnCompleteOrderButtonClicked);
