@@ -23,16 +23,7 @@ public class OrderView : MonoBehaviour
     private void OnCompleteOrderButtonClicked()
     {
         bool orderCompleted = OrderManager.Instance.CompleteOrder(_activeOrder);
-        if (orderCompleted)
-        {
-            Debug.Log($"Order {_activeOrder.orderData.orderName} completed!");
-            OrderManager.Instance.activeOrders.Remove(_activeOrder);
-            Destroy(gameObject);
-        }
-        else
-        {
+        if (!orderCompleted)
             Debug.Log($"Order {_activeOrder.orderData.orderName} could not be completed");
-        }
     }
-
 }

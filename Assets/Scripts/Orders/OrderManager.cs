@@ -7,6 +7,9 @@ public class OrderManager : MonoBehaviour
     public OrderData[] possibleOrders;
     public int maxActiveOrders = 10;
     public List<ActiveOrder> activeOrders = new List<ActiveOrder>();
+
+    public GameObject orderViewPrefab;
+    public Transform ordersContainer;
     
     private void Awake()
     {
@@ -16,6 +19,7 @@ public class OrderManager : MonoBehaviour
     private void Start()
     {
         FillEmptyOrderSlots();
+        RefreshOrderViews();
     }
 
     private OrderData AddActiveOrder(OrderData order)
@@ -56,6 +60,26 @@ public class OrderManager : MonoBehaviour
             foreach (GridCell cell in item.Value)
                 GridManager.Instance.RemoveItemFromCell(cell);
         }
+
+        CurrencyManager.Instance.AddCurrency(order.orderData.orderValue);
+
+        activeOrders.Remove(order);
+        FillEmptyOrderSlots();
+        RefreshOrderViews();
+
         return true;
+    }
+
+    private void RefreshOrderViews()
+    {
+        foreach (Transform child in ordersContainer)
+            Destroy(child.gameObject);
+
+        foreach (ActiveOrder order in activeOrders)
+        {
+            GameObject spawnedView = Instantiate(orderViewPrefab, ordersContainer);
+            OrderView orderView = spawnedView.GetComponent<OrderView>();
+            orderView.SetActiveOrder(order);
+        }
     }
 }
