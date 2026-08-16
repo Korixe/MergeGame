@@ -4,4 +4,5 @@ using System.Collections.Generic;
 public class SaveGameData
 {
     public List<SaveCellData> savedCellData;
+    public int savedCurrencyAmount;
 }

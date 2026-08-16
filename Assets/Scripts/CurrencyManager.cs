@@ -11,13 +11,31 @@ public class CurrencyManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        LoadCurrency();
+        SaveGameData loadedData = SaveManager.LoadGame();   
+        if (loadedData != null)
+            LoadCurrency(loadedData);
+        else
+            currencyAmount = 10;
     }
 
-    private void LoadCurrency()
+    private void LoadCurrency(SaveGameData loadedData)
     {
-        // load
-        currencyAmount = 10;
+        currencyAmount = loadedData.savedCurrencyAmount;
+    }
+
+    public void OnApplicationPause(bool pauseStatus)
+    {
+        SaveGameData saveData = new SaveGameData();
+        saveData.savedCurrencyAmount = currencyAmount;
+        if (pauseStatus)
+            SaveManager.SaveGame(saveData);
+    }
+
+    public void OnApplicationQuit()
+    {
+        SaveGameData saveData = new SaveGameData();
+        saveData.savedCurrencyAmount = currencyAmount;
+        SaveManager.SaveGame(saveData);
     }
 
     private void AddCurrency(int amount)
