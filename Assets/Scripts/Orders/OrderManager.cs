@@ -33,9 +33,9 @@ public class OrderManager : MonoBehaviour
 
         foreach(OrderRequirements requirement in order.orderData.requirements)
         {
-            // get cell with item
+            List<GridCell> cellsWithItem = GridManager.Instance.GetCellsWithItem(requirement.itemData, requirement.requiredAmount);
 
-            if (cellsWithItem.Count < requirement.requiredAmount)
+            if (cellsWithItem == null)
                 return false;
 
             foundCells[requirement.itemData] = cellsWithItem;
@@ -44,9 +44,7 @@ public class OrderManager : MonoBehaviour
         foreach (var item in foundCells)
         {
             foreach (GridCell cell in item.Value)
-            {
-                // remove item from cell
-            }
+                GridManager.Instance.RemoveItemFromCell(cell);
         }
         return true;
     }

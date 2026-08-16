@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class GridManager : MonoBehaviour
@@ -143,5 +144,37 @@ public class GridManager : MonoBehaviour
     public void OnApplicationQuit()
     {
         SaveManager.SaveGame(CollectSaveData());
+    }
+
+    public List<GridCell> GetCellsWithItem(ItemData itemData, int amount)
+    {
+        List<GridCell> cellsWithItem = new List<GridCell>();
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                GridCell cell = _cells[i, j];
+                if (cell.isTaken && cell.itemData == itemData)
+                {
+                    cellsWithItem.Add(cell);
+                    if (cellsWithItem.Count >= amount)
+                        return cellsWithItem;
+                }
+            }
+        }
+
+        return null; // not found
+    }
+
+    public void RemoveItemFromCell(GridCell cell)
+    {
+        if (cell.isTaken)
+        {
+            Destroy(cell.itemView.gameObject);
+            cell.isTaken = false;
+            cell.itemData = null;
+            cell.itemView = null;
+        }
     }
 }
