@@ -109,6 +109,7 @@ public class GridManager : MonoBehaviour
                     };
 
                     saveData.savedCellData.Add(cellData);
+                    saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
                 }
             }
         }
@@ -128,6 +129,8 @@ public class GridManager : MonoBehaviour
             {
                 cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
             }
+            
+            CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
         }
     }
 
