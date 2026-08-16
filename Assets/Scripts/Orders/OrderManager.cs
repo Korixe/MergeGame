@@ -15,16 +15,26 @@ public class OrderManager : MonoBehaviour
 
     private void Start()
     {
-        // fill empty slots with random orders
+        FillEmptyOrderSlots();
     }
 
-    public OrderData AddActiveOrder(OrderData order)
+    private OrderData AddActiveOrder(OrderData order)
     {
         if (possibleOrders.Length == 0)
             return null;
 
         int randIndex = Random.Range(0, possibleOrders.Length);
         return possibleOrders[randIndex];
+    }
+
+    private void FillEmptyOrderSlots()
+    {
+        while (activeOrders.Count < maxActiveOrders)
+        {
+            OrderData newOrder = AddActiveOrder(null);
+            if (newOrder != null)
+                activeOrders.Add(new ActiveOrder(newOrder));
+        }
     }
 
     public bool CompleteOrder(ActiveOrder order)
