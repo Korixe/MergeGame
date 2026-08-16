@@ -123,15 +123,23 @@ public class GridManager : MonoBehaviour
         foreach (SaveCellData cellData in data.savedCellData)
         {
             GridCell cell = GetCell(cellData.row, cellData.column);
+            if (cell == null)
+            {
+                Debug.LogWarning("Saved cell position out of range: " + cellData.row + "," + cellData.column);
+                continue;
+            }
+
             ItemData itemData = GetItemDataByID(cellData.ItemID);
+            if (itemData == null)
+            {
+                Debug.LogWarning("Item with id " + cellData.ItemID + " not found");
+                continue;
+            }
+
             SpawnItemInCell(cell, cell.cellView, itemData);
 
             if(itemData is GeneratorData)
-            {
                 cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
-            }
-            
-            CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
         }
     }
 

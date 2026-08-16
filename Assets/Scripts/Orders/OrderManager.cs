@@ -33,7 +33,7 @@ public class OrderManager : MonoBehaviour
 
     private void FillEmptyOrderSlots()
     {
-        while (activeOrders.Count < maxActiveOrders)
+        while (activeOrders.Count < 1) // Change this to maxActiveOrders later
         {
             OrderData newOrder = AddActiveOrder(null);
             if (newOrder != null)
