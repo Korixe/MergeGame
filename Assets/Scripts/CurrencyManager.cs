@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,47 +6,42 @@ using UnityEngine.UI;
 public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance;
-
-    public int currencyAmount;
+    public TextMeshProUGUI currencyText;
+    private int _currencyAmount;
+    public int currencyAmount => _currencyAmount;
 
     private void Awake()
     {
         Instance = this;
-        SaveGameData loadedData = SaveManager.LoadGame();   
-        if (loadedData != null)
-            LoadCurrency(loadedData);
-        else
-            currencyAmount = 10;
+        _currencyAmount = 10;
+        UpdateCurrencyText();
     }
 
-    private void LoadCurrency(SaveGameData loadedData)
+    public void SetCurrency(int amount)
     {
-        currencyAmount = loadedData.savedCurrencyAmount;
-    }
-
-    public void OnApplicationPause(bool pauseStatus)
-    {
-        SaveGameData saveData = new SaveGameData();
-        saveData.savedCurrencyAmount = currencyAmount;
-        if (pauseStatus)
-            SaveManager.SaveGame(saveData);
-    }
-
-    public void OnApplicationQuit()
-    {
-        SaveGameData saveData = new SaveGameData();
-        saveData.savedCurrencyAmount = currencyAmount;
-        SaveManager.SaveGame(saveData);
+        _currencyAmount = amount;
+        UpdateCurrencyText();
     }
 
     private void AddCurrency(int amount)
     {
-        currencyAmount += amount;
+        _currencyAmount += amount;
+        UpdateCurrencyText();
     }
 
-    private void SubtractCurrency(int amount)
+    private bool SubtractCurrency(int amount)
     {
-        currencyAmount -= amount;
+        if (_currencyAmount < amount)
+            return false;
+            
+        _currencyAmount -= amount;
+        UpdateCurrencyText();
+        return true;
+    }
+
+    private void UpdateCurrencyText()
+    {
+        currencyText.text = _currencyAmount.ToString();
     }
 
 }
