@@ -4,53 +4,50 @@ using System.Collections.Generic;
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance;
-    public ActiveOrders activeOrders;
+    public OrderData[] possibleOrders;
+    public int maxActiveOrders = 10;
+    public List<ActiveOrder> activeOrders = new List<ActiveOrder>();
     
     private void Awake()
     {
         Instance = this;
     }
 
-    public void AddActiveOrder(OrderData order)
+    private void Start()
     {
-        if (activeOrders == null)
-            activeOrders = new ActiveOrders();
-
-        if (activeOrders.activeOrders == null)
-            activeOrders.activeOrders = new List<OrderData>();
-
-        if (activeOrders.requiredItems == null)
-            activeOrders.requiredItems = new List<ItemData>();
-
-        if (activeOrders.collectedItems == null)
-            activeOrders.collectedItems = new List<ItemData>();
-
-        activeOrders.activeOrders.Add(order);
-        activeOrders.requiredItems.AddRange(order.requiredItems);
+        // fill empty slots with random orders
     }
 
-    public bool CompleteOrder(OrderData order)
+    public OrderData AddActiveOrder(OrderData order)
     {
-        if (activeOrders == null || activeOrders.activeOrders == null)
-            return false;
+        if (possibleOrders.Length == 0)
+            return null;
 
-        if (activeOrders.activeOrders.Contains(order))
+        int randIndex = Random.Range(0, possibleOrders.Length);
+        return possibleOrders[randIndex];
+    }
+
+    public bool CompleteOrder(ActiveOrder order)
+    {
+        Dictionary<ItemData, List<GridCell>> foundCells = new Dictionary<ItemData, List<GridCell>>();
+
+        foreach(OrderRequirements requirement in order.orderData.requirements)
         {
-            activeOrders.activeOrders.Remove(order);
-            foreach (var item in order.requiredItems)
+            // get cell with item
+
+            if (cellsWithItem.Count < requirement.requiredAmount)
+                return false;
+
+            foundCells[requirement.itemData] = cellsWithItem;
+        }
+        
+        foreach (var item in foundCells)
+        {
+            foreach (GridCell cell in item.Value)
             {
-                activeOrders.requiredItems.Remove(item);
-                activeOrders.collectedItems.Remove(item);
+                // remove item from cell
             }
         }
         return true;
-    }
-
-    public bool IsOrderCompleted(OrderData order)
-    {
-        if (activeOrders == null || activeOrders.activeOrders == null)
-            return false;
-
-        return !activeOrders.activeOrders.Contains(order);
     }
 }
