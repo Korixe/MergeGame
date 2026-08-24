@@ -156,8 +156,7 @@ public class GridManager : MonoBehaviour
         }
 
         CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
-        EnergyManager.Instance.SetEnergy(data.savedEnergyAmount);
-        EnergyManager.Instance.SetLastSyncTime(data.savedLastSyncTime);
+        EnergyManager.Instance.RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
     }
 
     public void OnApplicationPause(bool pauseStatus)

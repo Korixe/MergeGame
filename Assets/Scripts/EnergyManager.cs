@@ -24,7 +24,6 @@ public class EnergyManager : MonoBehaviour
     private void Start()
     {
         _currentRegenerationTime = _energyRegenTime;
-        OfflineEnergyRegeneration();
     }
 
     private void Update()
@@ -46,29 +45,44 @@ public class EnergyManager : MonoBehaviour
         _lastSyncTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
-    private void OfflineEnergyRegeneration()
+    public void RestoreEnergyState(int savedEnergy, long savedSyncTime)
     {
+        _energyAmount = savedEnergy;
+        _lastSyncTime = savedSyncTime;
+        
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long elapsedTime = currentTime - _lastSyncTime;
 
-        int energyToRegenerate = (int)(elapsedTime / _energyRegenTime);
-        if (energyToRegenerate > 0)
+        if (_energyAmount < _maxEnergy && elapsedTime > 0)
         {
-            OfflineAddEnergy(energyToRegenerate);
-            SyncTime();
+            int energyToRegenerate = (int)(elapsedTime / (long)_energyRegenTime);
+            long remainder = elapsedTime % (long)_energyRegenTime;
+
+            _energyAmount += energyToRegenerate;
+
+            if (_energyAmount >= _maxEnergy)
+            {
+                _energyAmount = _maxEnergy;
+                _currentRegenerationTime = _energyRegenTime;
+                SyncTime();
+            }
+            else
+            {
+                _currentRegenerationTime = _energyRegenTime - remainder;
+                _lastSyncTime = currentTime - remainder;
+            }
         }
+        else if (_energyAmount >= _maxEnergy)
+            SyncTime();
+
         UpdateEnergyText();
     }
 
-    public void SetEnergy(int amount)
+    public void InitializeNewGame()
     {
-        _energyAmount = amount;
+        _energyAmount = _maxEnergy;
+        SyncTime();
         UpdateEnergyText();
-    }
-
-    public void SetLastSyncTime(long lastSyncTime)
-    {
-        _lastSyncTime = lastSyncTime;
     }
 
     public void RegenerateEnergy()
