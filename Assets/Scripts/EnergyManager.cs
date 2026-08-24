@@ -24,6 +24,7 @@ public class EnergyManager : MonoBehaviour
     private void Start()
     {
         _currentRegenerationTime = _energyRegenTime;
+        OfflineEnergyRegeneration();
     }
 
     private void Update()
@@ -45,6 +46,20 @@ public class EnergyManager : MonoBehaviour
         _lastSyncTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
+    private void OfflineEnergyRegeneration()
+    {
+        long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long elapsedTime = currentTime - _lastSyncTime;
+
+        int energyToRegenerate = (int)(elapsedTime / _energyRegenTime);
+        if (energyToRegenerate > 0)
+        {
+            OfflineAddEnergy(energyToRegenerate);
+            SyncTime();
+        }
+        UpdateEnergyText();
+    }
+
     public void SetEnergy(int amount)
     {
         _energyAmount = amount;
@@ -59,7 +74,16 @@ public class EnergyManager : MonoBehaviour
             UpdateEnergyText();
             SyncTime();
         }
-    } 
+    }
+
+    public void OfflineAddEnergy(int amount)
+    {
+        _energyAmount += amount;
+        if (_energyAmount > _maxEnergy)
+            _energyAmount = _maxEnergy;
+
+        UpdateEnergyText();
+    }
 
     public void AddEnergy(int amount)
     {
