@@ -27,7 +27,11 @@ public class GridManager : MonoBehaviour
         if (loadedData != null)
             RestoreFromLoadedData(loadedData);     
         else
+        {
             SpawnTestItems();
+            CurrencyManager.Instance.SetCurrency(0);
+            EnergyManager.Instance.InitializeNewGame();
+        }
     }
 
     private void InitializeGrid()
@@ -94,7 +98,7 @@ public class GridManager : MonoBehaviour
     public SaveGameData CollectSaveData()
     {
         SaveGameData saveData = new SaveGameData();
-        saveData.savedCellData = new System.Collections.Generic.List<SaveCellData>();
+        saveData.savedCellData = new List<SaveCellData>();
 
         for (int i = 0; i < rows; i++)
         {
@@ -120,6 +124,13 @@ public class GridManager : MonoBehaviour
         // Save currency amount
         if (CurrencyManager.Instance != null)
             saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
+
+        // Save energy amount and last sync time for offline energy regen
+        if (EnergyManager.Instance != null)
+        {
+            saveData.savedEnergyAmount = EnergyManager.Instance.energyAmount;
+            saveData.savedLastSyncTime = EnergyManager.Instance.lastSyncTime;
+        }
 
         return saveData;
     }
@@ -149,6 +160,7 @@ public class GridManager : MonoBehaviour
         }
 
         CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
+        EnergyManager.Instance.RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
     }
 
     public void OnApplicationPause(bool pauseStatus)
