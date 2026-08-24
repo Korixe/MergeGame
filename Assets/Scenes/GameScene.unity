@@ -280,7 +280,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrderManager
   possibleOrders:
   - {fileID: 11400000, guid: 1aaa878314d357542872d0d31b152bb8, type: 2}
-  maxActiveOrders: 10
+  - {fileID: 11400000, guid: 266a7608b072cf549a5649901873bf69, type: 2}
+  maxActiveOrders: 2
   orderViewPrefab: {fileID: 553179520007037443, guid: 22c7e3fdd0ae4d049a38200cd50da2f1, type: 3}
   ordersContainer: {fileID: 487557596}
 --- !u!1 &487557595
@@ -339,7 +340,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 200, y: 100}
   m_Spacing: {x: 4, y: 4}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -672,7 +673,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
