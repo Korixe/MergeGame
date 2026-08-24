@@ -6,4 +6,5 @@ public class GeneratorData : ItemData
     public ItemData[] possibleItems;
     public int maxSpawns;
     public float cooldownTime;
+    public int energyCost;
 }

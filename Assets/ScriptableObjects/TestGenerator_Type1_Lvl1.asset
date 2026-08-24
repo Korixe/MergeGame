@@ -25,3 +25,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b254c7ded28ed14ebeb9cf783e3eff7, type: 2}
   maxSpawns: 10
   cooldownTime: 10
+  energyCost: 1

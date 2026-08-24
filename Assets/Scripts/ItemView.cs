@@ -173,6 +173,12 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
                 if (targetCell != null)
                 {
+                    if (!EnergyManager.Instance.SubtractEnergy(generatorData.energyCost))
+                    {
+                        Debug.Log("Not enough energy!");
+                        return;
+                    }
+                    
                     GridManager.Instance.SpawnItemInCell(targetCell, targetCell.cellView, randomItem);
                     _itemUsed++;
 
