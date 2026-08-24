@@ -27,7 +27,11 @@ public class GridManager : MonoBehaviour
         if (loadedData != null)
             RestoreFromLoadedData(loadedData);     
         else
+        {
             SpawnTestItems();
+            CurrencyManager.Instance.SetCurrency(0);
+            EnergyManager.Instance.InitializeNewGame();
+        }
     }
 
     private void InitializeGrid()
