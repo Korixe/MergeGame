@@ -13,7 +13,6 @@ public class CurrencyManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _currencyAmount = 10;
         UpdateCurrencyText();
     }
 

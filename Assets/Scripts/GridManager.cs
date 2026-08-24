@@ -19,7 +19,10 @@ public class GridManager : MonoBehaviour
     {
         Instance = this;
         InitializeGrid();
-        
+    }
+
+    private void Start()
+    {
         SaveGameData loadedData = SaveManager.LoadGame();   
         if (loadedData != null)
             RestoreFromLoadedData(loadedData);     
@@ -110,10 +113,13 @@ public class GridManager : MonoBehaviour
                     };
 
                     saveData.savedCellData.Add(cellData);
-                    saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
                 }
             }
         }
+
+        // Save currency amount
+        if (CurrencyManager.Instance != null)
+            saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
 
         return saveData;
     }
@@ -141,6 +147,8 @@ public class GridManager : MonoBehaviour
             if(itemData is GeneratorData)
                 cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
         }
+
+        CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
     }
 
     public void OnApplicationPause(bool pauseStatus)
