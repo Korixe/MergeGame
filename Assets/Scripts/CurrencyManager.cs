@@ -13,7 +13,6 @@ public class CurrencyManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _currencyAmount = 10;
         UpdateCurrencyText();
     }
 
@@ -23,13 +22,13 @@ public class CurrencyManager : MonoBehaviour
         UpdateCurrencyText();
     }
 
-    private void AddCurrency(int amount)
+    public void AddCurrency(int amount)
     {
         _currencyAmount += amount;
         UpdateCurrencyText();
     }
 
-    private bool SubtractCurrency(int amount)
+    public bool SubtractCurrency(int amount)
     {
         if (_currencyAmount < amount)
             return false;

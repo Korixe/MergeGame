@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class GridManager : MonoBehaviour
@@ -18,7 +19,10 @@ public class GridManager : MonoBehaviour
     {
         Instance = this;
         InitializeGrid();
-        
+    }
+
+    private void Start()
+    {
         SaveGameData loadedData = SaveManager.LoadGame();   
         if (loadedData != null)
             RestoreFromLoadedData(loadedData);     
@@ -109,10 +113,13 @@ public class GridManager : MonoBehaviour
                     };
 
                     saveData.savedCellData.Add(cellData);
-                    saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
                 }
             }
         }
+
+        // Save currency amount
+        if (CurrencyManager.Instance != null)
+            saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
 
         return saveData;
     }
@@ -122,16 +129,26 @@ public class GridManager : MonoBehaviour
         foreach (SaveCellData cellData in data.savedCellData)
         {
             GridCell cell = GetCell(cellData.row, cellData.column);
+            if (cell == null)
+            {
+                Debug.LogWarning("Saved cell position out of range: " + cellData.row + "," + cellData.column);
+                continue;
+            }
+
             ItemData itemData = GetItemDataByID(cellData.ItemID);
+            if (itemData == null)
+            {
+                Debug.LogWarning("Item with id " + cellData.ItemID + " not found");
+                continue;
+            }
+
             SpawnItemInCell(cell, cell.cellView, itemData);
 
             if(itemData is GeneratorData)
-            {
                 cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
-            }
-            
-            CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
         }
+
+        CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
     }
 
     public void OnApplicationPause(bool pauseStatus)
@@ -143,5 +160,37 @@ public class GridManager : MonoBehaviour
     public void OnApplicationQuit()
     {
         SaveManager.SaveGame(CollectSaveData());
+    }
+
+    public List<GridCell> GetCellsWithItem(ItemData itemData, int amount)
+    {
+        List<GridCell> cellsWithItem = new List<GridCell>();
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                GridCell cell = _cells[i, j];
+                if (cell.isTaken && cell.itemData == itemData)
+                {
+                    cellsWithItem.Add(cell);
+                    if (cellsWithItem.Count >= amount)
+                        return cellsWithItem;
+                }
+            }
+        }
+
+        return null; // not found
+    }
+
+    public void RemoveItemFromCell(GridCell cell)
+    {
+        if (cell.isTaken)
+        {
+            Destroy(cell.itemView.gameObject);
+            cell.isTaken = false;
+            cell.itemData = null;
+            cell.itemView = null;
+        }
     }
 }
