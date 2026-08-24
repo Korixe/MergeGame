@@ -10,7 +10,7 @@ public class EnergyManager : MonoBehaviour
     public TextMeshProUGUI energyText;
     private int _energyAmount;
     private int _maxEnergy = 100;
-    private float _energyRegenTime = 300f; // 300 seconds
+    private float _energyRegenTime = 5f; // 300 seconds
     private float _currentRegenerationTime;
     private long _lastSyncTime;
     public int energyAmount => _energyAmount;
@@ -64,6 +64,11 @@ public class EnergyManager : MonoBehaviour
     {
         _energyAmount = amount;
         UpdateEnergyText();
+    }
+
+    public void SetLastSyncTime(long lastSyncTime)
+    {
+        _lastSyncTime = lastSyncTime;
     }
 
     public void RegenerateEnergy()
