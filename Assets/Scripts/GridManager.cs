@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class GridManager : MonoBehaviour
+public class GridManager : MonoBehaviour, ISaveable
 {
     public static GridManager Instance;
     
@@ -21,17 +21,69 @@ public class GridManager : MonoBehaviour
         InitializeGrid();
     }
 
-    private void Start()
+    public void CollectSaveData(SaveGameData data)
     {
-        SaveGameData loadedData = SaveManager.LoadGame();   
-        if (loadedData != null)
-            RestoreFromLoadedData(loadedData);     
-        else
+        data.savedCellData = new List<SaveCellData>();
+
+        for (int i = 0; i < rows; i++)
         {
-            SpawnTestItems();
-            CurrencyManager.Instance.SetCurrency(0);
-            EnergyManager.Instance.InitializeNewGame();
+            for (int j = 0; j < columns; j++)
+            {
+                GridCell cell = _cells[i, j];
+                if (cell.isTaken && cell.itemData != null)
+                {
+                    data.savedCellData.Add(new SaveCellData
+                    {
+                        row = cell.row,
+                        column = cell.column,
+                        ItemID = cell.itemData.itemID,
+                        itemUsed = cell.itemView.itemUsed,
+                        isOnCooldown = cell.itemView.isOnCooldown
+                    });
+                }
+            }
         }
+
+        /* Save currency amount
+        if (CurrencyManager.Instance != null)
+            saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
+
+        // Save energy amount and last sync time for offline energy regen
+        if (EnergyManager.Instance != null)
+        {
+            saveData.savedEnergyAmount = EnergyManager.Instance.energyAmount;
+            saveData.savedLastSyncTime = EnergyManager.Instance.lastSyncTime;
+        }
+
+        return saveData;*/
+    }
+
+    public void LoadSaveData(SaveGameData data)
+    {
+        foreach (SaveCellData cellData in data.savedCellData)
+        {
+            GridCell cell = GetCell(cellData.row, cellData.column);
+            if (cell == null)
+            {
+                Debug.LogWarning("Saved cell position out of range: " + cellData.row + "," + cellData.column);
+                continue;
+            }
+
+            ItemData itemData = itemDatabase.GetItemByID(cellData.ItemID);
+            if (itemData == null)
+            {
+                Debug.LogWarning("Item with id " + cellData.ItemID + " not found");
+                continue;
+            }
+
+            SpawnItemInCell(cell, cell.cellView, itemData);
+
+            if(itemData is GeneratorData)
+                cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
+        }
+
+        CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
+        EnergyManager.Instance.RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
     }
 
     private void InitializeGrid()
@@ -83,85 +135,6 @@ public class GridManager : MonoBehaviour
         ItemView itemView = spawnedItem.GetComponent<ItemView>();
         itemView.SetItemData(itemData);
         cell.itemView = itemView;
-    }
-
-    public SaveGameData CollectSaveData()
-    {
-        SaveGameData saveData = new SaveGameData();
-        saveData.savedCellData = new List<SaveCellData>();
-
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                GridCell cell = _cells[i, j];
-                if (cell.isTaken && cell.itemData != null)
-                {
-                    SaveCellData cellData = new SaveCellData
-                    {
-                        row = cell.row,
-                        column = cell.column,
-                        ItemID = cell.itemData.itemID,
-                        itemUsed = cell.itemView.itemUsed,
-                        isOnCooldown = cell.itemView.isOnCooldown
-                    };
-
-                    saveData.savedCellData.Add(cellData);
-                }
-            }
-        }
-
-        // Save currency amount
-        if (CurrencyManager.Instance != null)
-            saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
-
-        // Save energy amount and last sync time for offline energy regen
-        if (EnergyManager.Instance != null)
-        {
-            saveData.savedEnergyAmount = EnergyManager.Instance.energyAmount;
-            saveData.savedLastSyncTime = EnergyManager.Instance.lastSyncTime;
-        }
-
-        return saveData;
-    }
-
-    public void RestoreFromLoadedData(SaveGameData data)
-    {
-        foreach (SaveCellData cellData in data.savedCellData)
-        {
-            GridCell cell = GetCell(cellData.row, cellData.column);
-            if (cell == null)
-            {
-                Debug.LogWarning("Saved cell position out of range: " + cellData.row + "," + cellData.column);
-                continue;
-            }
-
-            ItemData itemData = itemDatabase.GetItemByID(cellData.ItemID);
-            if (itemData == null)
-            {
-                Debug.LogWarning("Item with id " + cellData.ItemID + " not found");
-                continue;
-            }
-
-            SpawnItemInCell(cell, cell.cellView, itemData);
-
-            if(itemData is GeneratorData)
-                cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
-        }
-
-        CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
-        EnergyManager.Instance.RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
-    }
-
-    public void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-            SaveManager.SaveGame(CollectSaveData());
-    }
-
-    public void OnApplicationQuit()
-    {
-        SaveManager.SaveGame(CollectSaveData());
     }
 
     public List<GridCell> GetCellsWithItem(ItemData itemData, int amount)
