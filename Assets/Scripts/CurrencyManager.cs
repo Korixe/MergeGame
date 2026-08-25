@@ -1,9 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-[System.Serializable]
-public class CurrencyManager : MonoBehaviour
+public class CurrencyManager : MonoBehaviour, ISaveable
 {
     public static CurrencyManager Instance;
     public TextMeshProUGUI currencyText;
@@ -14,6 +12,16 @@ public class CurrencyManager : MonoBehaviour
     {
         Instance = this;
         UpdateCurrencyText();
+    }
+
+    public void CollectSaveData(SaveGameData data)
+    {
+        data.savedCurrencyAmount = _currencyAmount;
+    }
+
+    public void LoadSaveData(SaveGameData data)
+    {
+        SetCurrency(data.savedCurrencyAmount);
     }
 
     public void SetCurrency(int amount)
