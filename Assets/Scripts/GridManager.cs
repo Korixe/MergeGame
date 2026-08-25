@@ -73,7 +73,7 @@ public class GridManager : MonoBehaviour, ISaveable
     public void SpawnTestItems()
     {
         //test
-        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_item_lvl2"));
+        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
     }
 
     public GridCell GetCell(int row, int col)
