@@ -81,9 +81,6 @@ public class GridManager : MonoBehaviour, ISaveable
             if(itemData is GeneratorData)
                 cell.itemView.RestoreGeneratorState(cellData.itemUsed, cellData.isOnCooldown);
         }
-
-        CurrencyManager.Instance.SetCurrency(data.savedCurrencyAmount);
-        EnergyManager.Instance.RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
     }
 
     private void InitializeGrid()
