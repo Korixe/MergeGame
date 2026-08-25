@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-[System.Serializable]
 public class CurrencyManager : MonoBehaviour, ISaveable
 {
     public static CurrencyManager Instance;

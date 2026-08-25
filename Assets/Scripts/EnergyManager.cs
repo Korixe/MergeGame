@@ -1,9 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 
-[System.Serializable]
 public class EnergyManager : MonoBehaviour, ISaveable
 {
     public static EnergyManager Instance;
