@@ -70,30 +70,11 @@ public class GridManager : MonoBehaviour, ISaveable
         }
     }
 
-    private void InitializeGrid()
-    {
-        _cells = new GridCell[rows, columns];
-
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                _cells[i, j] = new GridCell(i, j);
-                GameObject spawnedObject = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity);
-                spawnedObject.transform.SetParent(gridLayout.transform, false);
-                CellView cellView = spawnedObject.GetComponent<CellView>();
-                cellView.SetPosition(i, j);
-                _cells[i, j].cellView = cellView;
-            }
-        }
-    }
-
-    private void SpawnTestItems()
+    public void SpawnTestItems()
     {
         //test
         if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_item_lvl2"));
     }
-
 
     public GridCell GetCell(int row, int col)
     {
@@ -150,6 +131,24 @@ public class GridManager : MonoBehaviour, ISaveable
             cell.isTaken = false;
             cell.itemData = null;
             cell.itemView = null;
+        }
+    }
+
+    private void InitializeGrid()
+    {
+        _cells = new GridCell[rows, columns];
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                _cells[i, j] = new GridCell(i, j);
+                GameObject spawnedObject = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity);
+                spawnedObject.transform.SetParent(gridLayout.transform, false);
+                CellView cellView = spawnedObject.GetComponent<CellView>();
+                cellView.SetPosition(i, j);
+                _cells[i, j].cellView = cellView;
+            }
         }
     }
 }
