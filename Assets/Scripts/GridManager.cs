@@ -43,19 +43,6 @@ public class GridManager : MonoBehaviour, ISaveable
                 }
             }
         }
-
-        /* Save currency amount
-        if (CurrencyManager.Instance != null)
-            saveData.savedCurrencyAmount = CurrencyManager.Instance.currencyAmount;
-
-        // Save energy amount and last sync time for offline energy regen
-        if (EnergyManager.Instance != null)
-        {
-            saveData.savedEnergyAmount = EnergyManager.Instance.energyAmount;
-            saveData.savedLastSyncTime = EnergyManager.Instance.lastSyncTime;
-        }
-
-        return saveData;*/
     }
 
     public void LoadSaveData(SaveGameData data)

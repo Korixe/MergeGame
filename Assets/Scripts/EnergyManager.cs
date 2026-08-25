@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System;
 
 [System.Serializable]
-public class EnergyManager : MonoBehaviour
+public class EnergyManager : MonoBehaviour, ISaveable
 {
     public static EnergyManager Instance;
     public TextMeshProUGUI energyText;
@@ -38,6 +38,17 @@ public class EnergyManager : MonoBehaviour
                 _currentRegenerationTime = _energyRegenTime;
             }
         }
+    }
+
+    public void CollectSaveData(SaveGameData data)
+    {
+        data.savedEnergyAmount = _energyAmount;
+        data.savedLastSyncTime = _lastSyncTime;
+    }
+
+    public void LoadSaveData(SaveGameData data)
+    {
+        RestoreEnergyState(data.savedEnergyAmount, data.savedLastSyncTime);
     }
 
     public void SyncTime()
