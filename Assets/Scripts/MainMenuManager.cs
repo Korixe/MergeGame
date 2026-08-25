@@ -10,13 +10,14 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
-        DisplayCurrency();
+        UpdateEnergyText(EnergyManager.Instance.energyAmount);
+        EnergyManager.Instance.OnEnergyChanged += UpdateEnergyText;
         DisplayEnergy();
     }
 
-    private void DisplayCurrency()
+    private void UpdateEnergyText(int newEnergyAmount)
     {
-
+        energyText.text = newEnergyAmount.ToString();
     }
     private void DisplayEnergy()
     {
@@ -26,5 +27,10 @@ public class MainMenuManager : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         SceneManager.LoadScene(gameSceneName);
+    }
+    private void OnDestroy()
+    {  
+        if (EnergyManager.Instance != null)
+            EnergyManager.Instance.OnEnergyChanged -= UpdateEnergyText;
     }
 }

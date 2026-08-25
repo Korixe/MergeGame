@@ -5,6 +5,7 @@ using System;
 public class EnergyManager : MonoBehaviour, ISaveable
 {
     public static EnergyManager Instance;
+    public event Action<int> OnEnergyChanged;
     public TextMeshProUGUI energyText;
     private int _energyAmount;
     private int _maxEnergy = 100;
@@ -16,7 +17,14 @@ public class EnergyManager : MonoBehaviour, ISaveable
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -84,14 +92,14 @@ public class EnergyManager : MonoBehaviour, ISaveable
         else if (_energyAmount >= _maxEnergy)
             SyncTime();
 
-        UpdateEnergyText();
+        NotifyEnergyChanged();
     }
 
     public void InitializeNewGame()
     {
         _energyAmount = _maxEnergy;
         SyncTime();
-        UpdateEnergyText();
+        NotifyEnergyChanged();
     }
 
     public void RegenerateEnergy()
@@ -99,24 +107,15 @@ public class EnergyManager : MonoBehaviour, ISaveable
         if (_energyAmount < _maxEnergy)
         {
             _energyAmount++;
-            UpdateEnergyText();
+            NotifyEnergyChanged();
             SyncTime();
         }
-    }
-
-    public void OfflineAddEnergy(int amount)
-    {
-        _energyAmount += amount;
-        if (_energyAmount > _maxEnergy)
-            _energyAmount = _maxEnergy;
-
-        UpdateEnergyText();
     }
 
     public void AddEnergy(int amount)
     {
         _energyAmount += amount;
-        UpdateEnergyText();
+        NotifyEnergyChanged();
     }
 
     public bool SubtractEnergy(int amount)
@@ -125,7 +124,7 @@ public class EnergyManager : MonoBehaviour, ISaveable
             return false;
 
         _energyAmount -= amount;
-        UpdateEnergyText();
+        NotifyEnergyChanged();
 
         if (_energyAmount == _maxEnergy - amount)
         {
@@ -136,9 +135,10 @@ public class EnergyManager : MonoBehaviour, ISaveable
         return true;
     }
 
-    private void UpdateEnergyText()
+    private void NotifyEnergyChanged()
     {
-        energyText.text = _energyAmount.ToString();
+        OnEnergyChanged?.Invoke(_energyAmount);
+        if (energyText != null)
+            energyText.text = _energyAmount.ToString();
     }
-
 }
