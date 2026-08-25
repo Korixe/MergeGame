@@ -13,7 +13,7 @@ public class GridManager : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject itemPrefab;
     public GridLayoutGroup gridLayout;
-    public ItemData[] itemDatas;
+    public ItemDatabase itemDatabase;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class GridManager : MonoBehaviour
     private void SpawnTestItems()
     {
         //test
-        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatas[2]);
+        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_item_lvl2"));
     }
 
 
@@ -83,16 +83,6 @@ public class GridManager : MonoBehaviour
         ItemView itemView = spawnedItem.GetComponent<ItemView>();
         itemView.SetItemData(itemData);
         cell.itemView = itemView;
-    }
-
-    public ItemData GetItemDataByID(string id)
-    {
-        foreach (ItemData data in itemDatas)
-        {
-            if (data.itemID == id)
-                return data;
-        }
-        return null;
     }
 
     public SaveGameData CollectSaveData()
@@ -146,7 +136,7 @@ public class GridManager : MonoBehaviour
                 continue;
             }
 
-            ItemData itemData = GetItemDataByID(cellData.ItemID);
+            ItemData itemData = itemDatabase.GetItemByID(cellData.ItemID);
             if (itemData == null)
             {
                 Debug.LogWarning("Item with id " + cellData.ItemID + " not found");
