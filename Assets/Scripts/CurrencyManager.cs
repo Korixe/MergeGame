@@ -24,6 +24,11 @@ public class CurrencyManager : MonoBehaviour, ISaveable
         SetCurrency(data.savedCurrencyAmount);
     }
 
+    public void InitializeNewGame()
+    {
+        SetCurrency(0);
+    }
+
     public void SetCurrency(int amount)
     {
         _currencyAmount = amount;

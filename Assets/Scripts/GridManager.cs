@@ -70,10 +70,9 @@ public class GridManager : MonoBehaviour, ISaveable
         }
     }
 
-    public void SpawnTestItems()
+    public void InitializeNewGame()
     {
-        //test
-        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
+        SpawnTestItems();
     }
 
     public GridCell GetCell(int row, int col)
@@ -150,5 +149,11 @@ public class GridManager : MonoBehaviour, ISaveable
                 _cells[i, j].cellView = cellView;
             }
         }
+    }
+
+    private void SpawnTestItems()
+    {
+        //test
+        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
     }
 }

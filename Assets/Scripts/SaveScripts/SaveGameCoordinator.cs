@@ -38,9 +38,9 @@ public class SaveGameCoordinator : MonoBehaviour
 
     public void StartNewGame()
     {
-        CurrencyManager.Instance.SetCurrency(0);
+        CurrencyManager.Instance.InitializeNewGame();
         EnergyManager.Instance.InitializeNewGame();
-        GridManager.Instance.SpawnTestItems();
+        GridManager.Instance.InitializeNewGame();
     }
 
     public void SaveGame()
