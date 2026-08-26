@@ -5,52 +5,48 @@ public class SaveGameCoordinator : MonoBehaviour
 {
     public static SaveGameCoordinator Instance;
 
-    public List<MonoBehaviour> saveableComponents;
-    private List<ISaveable> _saveables;
+    private List<ISaveable> _saveables = new List<ISaveable>();
+    private SaveGameData _loadedData;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
-        _saveables = new List<ISaveable>();
+        DontDestroyOnLoad(gameObject);
 
-        foreach (MonoBehaviour component in saveableComponents)
-        {
-            if (component is ISaveable saveable)
-                _saveables.Add(saveable);
-            else
-                Debug.LogWarning(component.name + "does not implement ISaveable;");
-        }
+        _loadedData = SaveManager.LoadGame();
     }
 
-    private void Start()
+    public void RegisterSaveable(ISaveable saveable)
     {
-        SaveGameData loadedData = SaveManager.LoadGame();
-        if (loadedData != null)
-        {
-            foreach (ISaveable saveable in _saveables)
-                saveable.LoadSaveData(loadedData);
-        }
+        if (!_saveables.Contains(saveable))
+            _saveables.Add(saveable);
+
+        if(_loadedData != null)
+            saveable.LoadSaveData(_loadedData);
         else
-        {
-            StartNewGame();
-        }
+            saveable.InitializeNewGame();
     }
 
-    public void StartNewGame()
+    public void UnregisterSaveable(ISaveable saveable)
     {
-        CurrencyManager.Instance.InitializeNewGame();
-        EnergyManager.Instance.InitializeNewGame();
-        GridManager.Instance.InitializeNewGame();
+        _saveables.Remove(saveable);
     }
 
     public void SaveGame()
     {
-        SaveGameData data = new SaveGameData();
+        SaveGameData data = _loadedData ?? new SaveGameData();
 
         foreach (ISaveable saveable in _saveables)
             saveable.CollectSaveData(data);
 
         SaveManager.SaveGame(data);
+        _loadedData = data;
     }
 
     private void OnApplicationPause(bool pauseStatus)
