@@ -6,7 +6,6 @@ public class EnergyManager : MonoBehaviour, ISaveable
 {
     public static EnergyManager Instance;
     public event Action<int> OnEnergyChanged;
-    public TextMeshProUGUI energyText;
     private int _energyAmount;
     private int _maxEnergy = 100;
     private float _energyRegenTime = 5f; // 300 seconds
@@ -30,6 +29,7 @@ public class EnergyManager : MonoBehaviour, ISaveable
     private void Start()
     {
         _currentRegenerationTime = _energyRegenTime;
+        SaveGameCoordinator.Instance.RegisterSaveable(this);
     }
 
     private void Update()
@@ -138,7 +138,5 @@ public class EnergyManager : MonoBehaviour, ISaveable
     private void NotifyEnergyChanged()
     {
         OnEnergyChanged?.Invoke(_energyAmount);
-        if (energyText != null)
-            energyText.text = _energyAmount.ToString();
     }
 }
