@@ -1,17 +1,29 @@
 using TMPro;
 using UnityEngine;
+using System;
 
 public class CurrencyManager : MonoBehaviour, ISaveable
 {
     public static CurrencyManager Instance;
-    public TextMeshProUGUI currencyText;
+    public event Action<int> OnCurrencyChanged;
     private int _currencyAmount;
     public int currencyAmount => _currencyAmount;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         Instance = this;
-        UpdateCurrencyText();
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        SaveGameCoordinator.Instance.RegisterSaveable(this);
     }
 
     public void CollectSaveData(SaveGameData data)
@@ -24,31 +36,28 @@ public class CurrencyManager : MonoBehaviour, ISaveable
         SetCurrency(data.savedCurrencyAmount);
     }
 
+    public void InitializeNewGame()
+    {
+        SetCurrency(0);
+    }
+
     public void SetCurrency(int amount)
     {
         _currencyAmount = amount;
-        UpdateCurrencyText();
+        OnCurrencyChanged?.Invoke(_currencyAmount);
     }
 
     public void AddCurrency(int amount)
     {
-        _currencyAmount += amount;
-        UpdateCurrencyText();
+        SetCurrency(_currencyAmount + amount);
     }
 
     public bool SubtractCurrency(int amount)
     {
         if (_currencyAmount < amount)
             return false;
-            
-        _currencyAmount -= amount;
-        UpdateCurrencyText();
+
+        SetCurrency(_currencyAmount - amount);
         return true;
     }
-
-    private void UpdateCurrencyText()
-    {
-        currencyText.text = _currencyAmount.ToString();
-    }
-
 }

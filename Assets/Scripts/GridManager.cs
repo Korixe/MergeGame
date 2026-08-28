@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-[System.Serializable]
 public class GridManager : MonoBehaviour, ISaveable
 {
     public static GridManager Instance;
@@ -19,6 +18,11 @@ public class GridManager : MonoBehaviour, ISaveable
     {
         Instance = this;
         InitializeGrid();
+    }
+
+    private void Start()
+    {
+        SaveGameCoordinator.Instance.RegisterSaveable(this);
     }
 
     public void CollectSaveData(SaveGameData data)
@@ -70,10 +74,9 @@ public class GridManager : MonoBehaviour, ISaveable
         }
     }
 
-    public void SpawnTestItems()
+    public void InitializeNewGame()
     {
-        //test
-        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
+        SpawnTestItems();
     }
 
     public GridCell GetCell(int row, int col)
@@ -150,5 +153,17 @@ public class GridManager : MonoBehaviour, ISaveable
                 _cells[i, j].cellView = cellView;
             }
         }
+    }
+
+    private void SpawnTestItems()
+    {
+        //test
+        if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
+    }
+
+    private void OnDestroy()
+    {
+        if (SaveGameCoordinator.Instance != null)
+            SaveGameCoordinator.Instance.UnregisterSaveable(this);
     }
 }
