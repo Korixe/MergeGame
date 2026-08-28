@@ -542,6 +542,7 @@ GameObject:
   - component: {fileID: 1161092200}
   - component: {fileID: 1161092202}
   - component: {fileID: 1161092201}
+  - component: {fileID: 1161092203}
   m_Layer: 5
   m_Name: CurrencyAmount
   m_TagString: Untagged
@@ -668,6 +669,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1161092199}
   m_CullTransparentMesh: 1
+--- !u!114 &1161092203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161092199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b982602afe9e92d41b456a95d653325e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CurrencyDisplay
 --- !u!1 &1733246455
 GameObject:
   m_ObjectHideFlags: 0
