@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-[System.Serializable]
 public class GridManager : MonoBehaviour, ISaveable
 {
     public static GridManager Instance;
@@ -161,4 +160,10 @@ public class GridManager : MonoBehaviour, ISaveable
         //test
         if (IsCellFree(3, 2)) SpawnItemInCell(GetCell(3, 2), GetCell(3, 2).cellView, itemDatabase.GetItemByID("test_generator_lvl1"));
     }
+
+    private void OnDestroy()
+{
+    if (SaveGameCoordinator.Instance != null)
+        SaveGameCoordinator.Instance.UnregisterSaveable(this);
+}
 }
