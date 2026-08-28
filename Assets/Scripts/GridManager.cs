@@ -21,6 +21,11 @@ public class GridManager : MonoBehaviour, ISaveable
         InitializeGrid();
     }
 
+    private void Start()
+    {
+        SaveGameCoordinator.Instance.RegisterSaveable(this);
+    }
+
     public void CollectSaveData(SaveGameData data)
     {
         data.savedCellData = new List<SaveCellData>();
