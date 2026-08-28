@@ -162,8 +162,8 @@ public class GridManager : MonoBehaviour, ISaveable
     }
 
     private void OnDestroy()
-{
-    if (SaveGameCoordinator.Instance != null)
-        SaveGameCoordinator.Instance.UnregisterSaveable(this);
-}
+    {
+        if (SaveGameCoordinator.Instance != null)
+            SaveGameCoordinator.Instance.UnregisterSaveable(this);
+    }
 }

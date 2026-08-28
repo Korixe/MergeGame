@@ -10,13 +10,13 @@ public class CurrencyDisplay : MonoBehaviour
         _text = GetComponent<TextMeshProUGUI>();
     }
 
-    private void OnEnable()
+    private void Start()
     {
         CurrencyManager.Instance.OnCurrencyChanged += UpdateText;
         UpdateText(CurrencyManager.Instance.currencyAmount);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (CurrencyManager.Instance != null)
             CurrencyManager.Instance.OnCurrencyChanged -= UpdateText;

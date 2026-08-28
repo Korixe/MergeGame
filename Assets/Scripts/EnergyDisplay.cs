@@ -10,13 +10,13 @@ public class EnergyDisplay : MonoBehaviour
         _text = GetComponent<TextMeshProUGUI>();
     }
 
-    private void OnEnable()
+    private void Start()
     {
         EnergyManager.Instance.OnEnergyChanged += UpdateText;
         UpdateText(EnergyManager.Instance.energyAmount);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (EnergyManager.Instance != null)
             EnergyManager.Instance.OnEnergyChanged -= UpdateText;
