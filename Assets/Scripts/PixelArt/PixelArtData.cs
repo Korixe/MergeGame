@@ -10,5 +10,4 @@ public class PixelArtData : ScriptableObject
     public Color[] pixelColors;
     public int price;
     public Sprite spritePrev;
-    public bool isClickable;
 }
