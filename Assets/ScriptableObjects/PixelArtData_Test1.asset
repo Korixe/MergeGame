@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 957c7fd036e8577428c51ae80400bfac, type: 3}
+  m_Name: PixelArtData_Test1
+  m_EditorClassIdentifier: Assembly-CSharp::PixelArtData
+  pixelArtID: 1
+  pixelArtName: Test
+  width: 10
+  height: 10
+  pixelColors:
+  - {r: 0.2004717, g: 0.48952407, b: 0.8018868, a: 0}
+  - {r: 0.8113208, g: 0.23344605, b: 0.23344605, a: 0}
+  - {r: 0.083704144, g: 0.9339623, b: 0.33667654, a: 0}
+  price: 10
+  spritePrev: {fileID: -2541595303327328845, guid: 5f83ebc19dd43954d8521e99803b6397, type: 3}
