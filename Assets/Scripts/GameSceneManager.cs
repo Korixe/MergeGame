@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviour
+public class GameSceneManager : MonoBehaviour
 {
-    public string gameSceneName = "GameScene";
+    public string gameSceneName = "MainMenuScene";
 
     public void OnPlayButtonClicked()
     {
+        SaveGameCoordinator.Instance.SaveGame();
         SceneManager.LoadScene(gameSceneName);
     }
 }
